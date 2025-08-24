@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Interactivo del Gobierno Universitario - UdeA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The SPA is designed with a thematic, single-page scrolling structure to guide the user through the core concepts of the report in a logical flow. It starts with an introduction (Inicio), moves to the foundational theoretical concepts (Conceptos Clave) explaining the dual analytical approach, then explores the key actors and power structures (Actores y Poder), and finally delves into the practical application of these concepts through the analysis of specific events (Dinámicas Políticas). This structure was chosen to transform a dense academic report into a digestible and engaging narrative, prioritizing user understanding and exploration over a literal translation of the report's chapters. Key interactions include tabbed content to compare concepts, an interactive diagram of the political environment, and charts visualizing the functions of governing bodies, allowing users to actively engage with the information. -->
+    <!-- Visualization & Content Choices: 
+    - Report Info: Dual analytical approach (Institutional vs. Political). Goal: Compare. Viz/Method: Tabbed content block (HTML/JS). Interaction: Clickable tabs to switch between definitions. Justification: Allows for direct, side-by-side comparison of the core theoretical pillars of the report. Library/Method: Vanilla JS.
+    - Report Info: The concept of the "Entorno Político Universitario". Goal: Organize/Explain. Viz/Method: Interactive diagram built with HTML/Tailwind CSS. Interaction: Hovering over elements reveals descriptive tooltips. Justification: Translates a complex static diagram from the report into an interactive element that clarifies the relationship between internal/external factors and key political components. Library/Method: HTML/Tailwind/JS.
+    - Report Info: Functions of the Consejo Superior Universitario (CSU). Goal: Inform/Proportions. Viz/Method: Donut Chart. Interaction: Tooltips on hover provide exact percentages. Justification: Effectively visualizes the report's finding that the CSU's functions are heavily concentrated in financial matters, making the data immediately impactful. Library/Method: Chart.js (Canvas).
+    - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8; /* Warm Neutral Background */
+            color: #4A4A4A;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #D35400; /* Subtle Accent */
+            border-bottom-color: #D35400;
+        }
+        .tab-button {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .tab-button.active {
+            background-color: #E67E22; /* Accent Color */
+            color: #FFFFFF;
+        }
+        .diagram-element {
+            transition: box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .diagram-element:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-[#D35400]">Gobierno Universitario UdeA</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#inicio" class="nav-link active">Inicio</a>
+                <a href="#conceptos" class="nav-link">Conceptos Clave</a>
+                <a href="#entorno" class="nav-link">El Entorno Político</a>
+                <a href="#actores" class="nav-link">Actores y Poder</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-2xl">☰</button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden flex-col items-center py-4 space-y-2">
+            <a href="#inicio" class="nav-link active">Inicio</a>
+            <a href="#conceptos" class="nav-link">Conceptos Clave</a>
+            <a href="#entorno" class="nav-link">El Entorno Político</a>
+            <a href="#actores" class="nav-link">Actores y Poder</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="inicio" class="text-center min-h-[60vh] flex flex-col justify-center items-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">Analizando el Poder en la Universidad</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                Esta aplicación interactiva explora el informe "Caracterización y Análisis del Gobierno Universitario de la Universidad de Antioquia". Navega a través de los conceptos, actores y dinámicas que definen la vida política de la universidad, transformando un denso análisis académico en una experiencia clara y accesible.
+            </p>
+        </section>
+
+        <section id="conceptos" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Conceptos Clave: Un Doble Enfoque</h2>
+                <p class="mt-2 text-gray-600 max-w-2xl mx-auto">El informe propone un análisis desde dos perspectivas complementarias para entender el gobierno universitario. No se limita a la estructura formal, sino que explora cómo el poder se ejerce en la práctica a través de conflictos y decisiones coyunturales.</p>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="flex justify-center mb-6 rounded-lg p-1 bg-gray-200/50">
+                    <button class="tab-button w-1/2 py-2 px-4 rounded-md text-center font-medium active" data-tab="politica">La Política (Lo Instituido)</button>
+                    <button class="tab-button w-1/2 py-2 px-4 rounded-md text-center font-medium" data-tab="politico">Lo Político (Lo Contingente)</button>
+                </div>
+                <div id="tab-content" class="bg-white p-8 rounded-xl shadow-md min-h-[250px]">
+                    <div class="tab-pane active" id="politica-content">
+                        <h3 class="text-2xl font-bold text-[#E67E22] mb-3">La Política: El Marco Institucional</h3>
+                        <p class="text-lg">Se refiere al conjunto de prácticas, discursos e instituciones que buscan establecer un orden y organizar la coexistencia. Es la dimensión **estructural y formal** del gobierno.</p>
+                        <ul class="mt-4 space-y-2 list-disc list-inside">
+                            <li>Analiza los marcos institucionales y legales.</li>
+                            <li>Examina los mecanismos, actores y órganos instituidos.</li>
+                            <li>Se enfoca en las normas y funciones que definen formalmente el ejercicio del poder.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane hidden" id="politico-content">
+                        <h3 class="text-2xl font-bold text-[#E67E22] mb-3">Lo Político: La Dimensión del Conflicto</h3>
+                        <p class="text-lg">Se refiere a la dimensión de antagonismo inherente a toda sociedad. Es la dimensión **coyuntural y conflictiva** que puede fortalecer o cuestionar el orden establecido.</p>
+                        <ul class="mt-4 space-y-2 list-disc list-inside">
+                            <li>Analiza los acontecimientos contingentes y las disputas de poder.</li>
+                            <li>Da cuenta del conflicto y el antagonismo dentro y fuera de los órganos de gobierno.</li>
+                            <li>Examina las reacciones y percepciones de la comunidad ante las decisiones.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="entorno" class="py-16 bg-white rounded-2xl shadow-lg my-16">
+            <div class="text-center mb-12 px-4">
+                <h2 class="text-3xl font-bold">El Entorno Político Universitario</h2>
+                <p class="mt-2 text-gray-600 max-w-3xl mx-auto">El gobierno universitario no opera en el vacío. Está influenciado por una compleja red de factores internos y externos que interactúan constantemente. Este diagrama interactivo descompone ese entorno.</p>
+            </div>
+            <div class="relative max-w-5xl mx-auto p-8 flex justify-center items-center">
+                <div class="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+                <div class="absolute inset-4 border-4 border-blue-100 rounded-full"></div>
+                
+                <div class="relative w-full aspect-square max-w-lg">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#E67E22] text-white p-6 rounded-full shadow-2xl z-20 text-center diagram-element" data-info="El núcleo del poder institucional, donde se toman las decisiones formales que guían a la universidad.">
+                        <span class="font-bold text-lg">Gobierno<br>Universitario</span>
+                    </div>
+
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full bg-purple-100 text-purple-800 p-3 rounded-lg shadow-md diagram-element" data-info="Las motivaciones y valores que guían las acciones de los actores, desde la defensa de la autonomía hasta la búsqueda de eficiencia.">
+                        <span class="font-semibold">Motivaciones y Valores</span>
+                    </div>
+                    
+                    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full bg-green-100 text-green-800 p-3 rounded-lg shadow-md diagram-element" data-info="Las visiones contrapuestas sobre el propósito y la dirección de la universidad, que se disputan en el escenario político.">
+                        <span class="font-semibold">Proyectos Políticos</span>
+                    </div>
+
+                    <div class="absolute top-1/2 right-0 translate-x-3/4 -translate-y-1/2 bg-red-100 text-red-800 p-3 rounded-lg shadow-md diagram-element" data-info="Las acciones y repertorios utilizados por los actores, como protestas, negociaciones o comunicados, para influir en las decisiones.">
+                        <span class="font-semibold">Acciones y Repertorios</span>
+                    </div>
+
+                    <div class="absolute top-1/2 left-0 -translate-x-3/4 -translate-y-1/2 bg-yellow-100 text-yellow-800 p-3 rounded-lg shadow-md diagram-element" data-info="Individuos y grupos (estudiantes, profesores, directivas, gobierno) que interactúan y compiten por el poder y la influencia.">
+                        <span class="font-semibold">Actores</span>
+                    </div>
+
+                    <div class="absolute top-10 right-10 text-blue-500 font-bold text-xl -rotate-45 diagram-element" data-info="Factores externos como organismos internacionales, el Estado, la sociedad y el sector privado que influyen en la universidad.">
+                        <span>Entorno Externo</span>
+                    </div>
+                     <div class="absolute bottom-10 left-10 text-blue-500 font-bold text-xl -rotate-45 diagram-element" data-info="El conjunto de campos, ámbitos y escenarios internos donde interactúan los actores universitarios.">
+                        <span>Espacio Político Interno</span>
+                    </div>
+                </div>
+            </div>
+             <div id="diagram-tooltip" class="hidden absolute bg-gray-800 text-white text-sm rounded-lg px-3 py-1.5 z-50 shadow-lg max-w-xs"></div>
+        </section>
+
+        <section id="actores" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Actores y Poder: El Consejo Superior Universitario</h2>
+                <p class="mt-2 text-gray-600 max-w-3xl mx-auto">El informe analiza en detalle los órganos de gobierno. Un hallazgo clave es la distribución de las funciones del Consejo Superior Universitario (CSU), el máximo órgano de dirección. La visualización muestra una marcada concentración en un área específica.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <h3 class="text-2xl font-bold mb-4">Distribución de Funciones del CSU (2010-2013)</h3>
+                    <p class="mb-4">El análisis de las actas del CSU revela que más de la mitad de su tiempo y decisiones se dedicaron a asuntos financieros. Esto contrasta con el tiempo dedicado a temas misionales como los académicos, de investigación y extensión.</p>
+                    <p class="mb-4">Esta concentración sugiere, según el informe, una tendencia hacia un gobierno con un fuerte enfoque administrativo y financiero, lo que puede tener implicaciones en la priorización de las políticas y el proyecto universitario.</p>
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md" role="alert">
+                        <p class="font-bold">Dato Clave</p>
+                        <p>El 51.9% de los temas tratados por el CSU fueron de carácter financiero, mientras que solo el 3.8% correspondieron a asuntos académicos, de investigación y extensión.</p>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2 chart-container">
+                    <canvas id="csuFunctionsChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>Aplicación creada para la visualización interactiva del informe del IEP (2015).</p>
+            <p class="text-sm text-gray-400 mt-2">Diseño y desarrollo con fines educativos.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                mobileMenu.classList.toggle('flex');
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 60) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (mobileMenu.classList.contains('flex')) {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('flex');
+                    }
+                });
+            });
+
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const targetTab = button.dataset.tab;
+
+                    tabPanes.forEach(pane => {
+                        if (pane.id === `${targetTab}-content`) {
+                            pane.classList.remove('hidden');
+                            pane.classList.add('active');
+                        } else {
+                            pane.classList.add('hidden');
+                            pane.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            const diagramElements = document.querySelectorAll('.diagram-element');
+            const tooltip = document.getElementById('diagram-tooltip');
+
+            diagramElements.forEach(el => {
+                el.addEventListener('mouseenter', (e) => {
+                    tooltip.textContent = el.dataset.info;
+                    tooltip.classList.remove('hidden');
+                    
+                    const rect = el.getBoundingClientRect();
+                    
+                    tooltip.style.visibility = 'hidden';
+                    tooltip.style.display = 'block';
+                    const tooltipRect = tooltip.getBoundingClientRect();
+                    tooltip.style.visibility = 'visible';
+                    tooltip.style.display = 'none';
+                    tooltip.classList.remove('hidden');
+
+                    let top = rect.bottom + window.scrollY + 8;
+                    let left = rect.left + window.scrollX + (rect.width / 2) - (tooltipRect.width / 2);
+
+                    if (left < 10) left = 10;
+                    if ((left + tooltipRect.width) > window.innerWidth) {
+                        left = window.innerWidth - tooltipRect.width - 10;
+                    }
+                    if (top + tooltipRect.height > window.innerHeight + window.scrollY) {
+                        top = rect.top + window.scrollY - tooltipRect.height - 8;
+                    }
+
+                    tooltip.style.top = `${top}px`;
+                    tooltip.style.left = `${left}px`;
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    tooltip.classList.add('hidden');
+                });
+            });
+
+            const ctx = document.getElementById('csuFunctionsChart').getContext('2d');
+            const csuFunctionsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Financieras', 'Otras', 'Gestión y Admón.', 'Dirección y Gobierno', 'Normativas', 'Académicas, Inv. y Ext.'],
+                    datasets: [{
+                        label: 'Proporción de Funciones del CSU (%)',
+                        data: [51.9, 15.1, 10.8, 10.4, 8.0, 3.8],
+                        backgroundColor: [
+                            '#E67E22', // Accent
+                            '#F39C12',
+                            '#F1C40F',
+                            '#BDC3C7',
+                            '#95A5A6',
+                            '#7F8C8D'
+                        ],
+                        borderColor: '#FDFBF8',
+                        borderWidth: 4,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#4A4A4A',
+                                font: {
+                                    size: 12,
+                                    family: 'Inter'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
