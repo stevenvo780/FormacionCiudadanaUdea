@@ -21,6 +21,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #FDFBF8; /* Warm Neutral Background */
             color: #4A4A4A;
+            scroll-behavior: smooth;
         }
         .nav-link {
             transition: color 0.3s, border-bottom-color 0.3s;
@@ -38,11 +39,12 @@
             color: #FFFFFF;
         }
         .diagram-element {
-            transition: box-shadow 0.2s;
+            transition: box-shadow 0.2s, transform 0.2s;
             cursor: pointer;
         }
         .diagram-element:hover {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
         }
         .chart-container {
             position: relative;
@@ -58,35 +60,145 @@
                 height: 400px;
             }
         }
+        
+        /* Animaciones personalizadas */
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Timeline personalizada */
+        .timeline-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Efectos hover para las tarjetas */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Gradientes personalizados */
+        .gradient-orange {
+            background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
+        }
+        
+        .gradient-blue {
+            background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);
+        }
+        
+        /* Estilos para elementos interactivos */
+        .interactive-element {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .interactive-element:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Estilos para el scroll personalizado */
+        .custom-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #E67E22 #f1f1f1;
+        }
+        
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #E67E22;
+            border-radius: 4px;
+        }
+        
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #D35400;
+        }
     </style>
 </head>
 <body class="antialiased">
 
     <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold text-[#D35400]">Gobierno Universitario UdeA</h1>
+            <h1 class="text-xl font-bold text-[#D35400]">
+                <a href="#inicio">Gobierno Universitario UdeA</a>
+            </h1>
             <div class="hidden md:flex space-x-8">
-                <a href="#inicio" class="nav-link active">Inicio</a>
-                <a href="#conceptos" class="nav-link">Conceptos Clave</a>
-                <a href="#entorno" class="nav-link">El Entorno Político</a>
-                <a href="#actores" class="nav-link">Actores y Poder</a>
+                <!-- NUEVO ORDEN -->
+                <a href="#conceptos"        class="nav-link active">Enfoque</a>
+                <a href="#entorno"          class="nav-link">Entorno Político</a>
+                <a href="#actores"          class="nav-link">Entorno Interno</a>
+                <a href="#marcos"           class="nav-link">Entorno Externo</a>
+                <a href="#acontecimientos"  class="nav-link">Gobierno en Acción</a>
+                <a href="#proyectos"        class="nav-link">Proyectos de Universidad</a>
+                <a href="#hallazgos"        class="nav-link">Conclusiones</a>
             </div>
             <button id="mobile-menu-button" class="md:hidden text-2xl">☰</button>
         </nav>
         <div id="mobile-menu" class="hidden md:hidden flex-col items-center py-4 space-y-2">
-            <a href="#inicio" class="nav-link active">Inicio</a>
-            <a href="#conceptos" class="nav-link">Conceptos Clave</a>
-            <a href="#entorno" class="nav-link">El Entorno Político</a>
-            <a href="#actores" class="nav-link">Actores y Poder</a>
+            <!-- NUEVO ORDEN (versión móvil) -->
+            <a href="#conceptos"        class="nav-link active">Enfoque</a>
+            <a href="#entorno"          class="nav-link">Entorno Político</a>
+            <a href="#actores"          class="nav-link">Entorno Interno</a>
+            <a href="#marcos"           class="nav-link">Entorno Externo</a>
+            <a href="#acontecimientos"  class="nav-link">Gobierno en Acción</a>
+            <a href="#proyectos"        class="nav-link">Proyectos de Universidad</a>
+            <a href="#hallazgos"        class="nav-link">Conclusiones</a>
         </div>
     </header>
 
     <main class="container mx-auto px-6 py-12">
         <section id="inicio" class="text-center min-h-[60vh] flex flex-col justify-center items-center">
             <h2 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">Analizando el Poder en la Universidad</h2>
-            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
                 Esta aplicación interactiva explora el informe "Caracterización y Análisis del Gobierno Universitario de la Universidad de Antioquia". Navega a través de los conceptos, actores y dinámicas que definen la vida política de la universidad, transformando un denso análisis académico en una experiencia clara y accesible.
             </p>
+            
+            <!-- Métricas del Estudio -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <div class="text-3xl font-bold text-[#E67E22]">2010-2013</div>
+                    <div class="text-gray-600 text-sm">Período Analizado</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <div class="text-3xl font-bold text-[#E67E22]">20</div>
+                    <div class="text-gray-600 text-sm">Entrevistas</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <div class="text-3xl font-bold text-[#E67E22]">3</div>
+                    <div class="text-gray-600 text-sm">Acontecimientos</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <div class="text-3xl font-bold text-[#E67E22]">+150</div>
+                    <div class="text-gray-600 text-sm">Documentos</div>
+                </div>
+            </div>
         </section>
 
         <section id="conceptos" class="py-16">
@@ -101,17 +213,19 @@
                 </div>
                 <div id="tab-content" class="bg-white p-8 rounded-xl shadow-md min-h-[250px]">
                     <div class="tab-pane active" id="politica-content">
-                        <h3 class="text-2xl font-bold text-[#E67E22] mb-3">La Política: El Marco Institucional</h3>
-                        <p class="text-lg">Se refiere al conjunto de prácticas, discursos e instituciones que buscan establecer un orden y organizar la coexistencia. Es la dimensión **estructural y formal** del gobierno.</p>
+                        <!-- NUEVO: encabezado y párrafo descriptivo -->
+                        <h3 class="text-2xl font-bold text-[#E67E22] mb-3">La Política: La Dimensión Institucional</h3>
+                        <p class="text-lg">Aborda la estructura normativa y los mecanismos formales a través de los cuales se organiza y ejerce el poder en la universidad.</p>
                         <ul class="mt-4 space-y-2 list-disc list-inside">
-                            <li>Analiza los marcos institucionales y legales.</li>
                             <li>Examina los mecanismos, actores y órganos instituidos.</li>
                             <li>Se enfoca en las normas y funciones que definen formalmente el ejercicio del poder.</li>
+                            <!-- NUEVO punto para completar la idea central -->
+                            <li>Analiza la jerarquía y las competencias asignadas dentro del marco legal.</li>
                         </ul>
                     </div>
                     <div class="tab-pane hidden" id="politico-content">
                         <h3 class="text-2xl font-bold text-[#E67E22] mb-3">Lo Político: La Dimensión del Conflicto</h3>
-                        <p class="text-lg">Se refiere a la dimensión de antagonismo inherente a toda sociedad. Es la dimensión **coyuntural y conflictiva** que puede fortalecer o cuestionar el orden establecido.</p>
+                        <p class="text-lg">Se refiere a la dimensión de antagonismo inherente a toda sociedad. Es la dimensión <strong>coyuntural y conflictiva</strong> que puede fortalecer o cuestionar el orden establecido.</p>
                         <ul class="mt-4 space-y-2 list-disc list-inside">
                             <li>Analiza los acontecimientos contingentes y las disputas de poder.</li>
                             <li>Da cuenta del conflicto y el antagonismo dentro y fuera de los órganos de gobierno.</li>
@@ -182,18 +296,593 @@
                     <canvas id="csuFunctionsChart"></canvas>
                 </div>
             </div>
+
+            <!-- NUEVO BLOQUE: Órganos adicionales -->
+            <div class="mt-16 space-y-10 max-w-6xl mx-auto">
+                <h3 class="text-2xl font-bold text-center">Otros Órganos Clave (2010-2013)</h3>
+
+                <!-- Consejo Académico -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h4 class="text-xl font-bold mb-2 text-[#E67E22]">📚 Consejo Académico (CA)</h4>
+                    <p class="text-gray-600 text-sm mb-3">Máxima autoridad académica, percibida como una “rectoría ampliada”. Preside el Rector e incluye decanos, vicerrectores y representantes profesoral y estudiantil (vacante).</p>
+                    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                        <li>Agenda influenciada por el Rector.</li>
+                        <li>Alta presencia de asuntos administrativos sobre académicos.</li>
+                        <li>Percepción de escaso contrapeso al CSU.</li>
+                    </ul>
+                </div>
+
+                <!-- Rector -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h4 class="text-xl font-bold mb-2 text-[#E67E22]">🏛️ Rector</h4>
+                    <p class="text-gray-600 text-sm mb-3">Primera autoridad ejecutiva y representante legal. Concentra funciones directivas, académicas, administrativas y financieras.</p>
+                    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                        <li>Centralidad en la toma de decisiones.</li>
+                        <li>Delegación frecuente de competencias por parte del CSU.</li>
+                        <li>Críticas por presunta sobre-concentración de poder.</li>
+                    </ul>
+                </div>
+
+                <!-- Autonomía Universitaria -->
+                <div class="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-xl">
+                    <h4 class="text-xl font-bold mb-2 text-indigo-700">🔑 Autonomía Universitaria</h4>
+                    <p class="text-gray-700 text-sm">Derecho consagrado en la Constitución de 1991 y la Ley 30 de 1992. Se manifiesta en los ámbitos jurídico, académico y financiero, aunque este último se ve limitado por la dependencia de recursos estatales y los controles externos.</p>
+                </div>
+            </div>
+
+            <!-- NUEVO BLOQUE: Valores Institucionales -->
+            <div class="bg-teal-50 border-l-4 border-teal-500 p-6 rounded-xl card-hover mt-10 max-w-6xl mx-auto">
+                <h4 class="text-xl font-bold mb-2 text-teal-700">🌱 Valores Institucionales</h4>
+                <p class="text-gray-700 text-sm mb-3">Principios que orientan la vida universitaria y legitiman la autonomía.</p>
+                <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                    <li>Libertad y diálogo intercultural</li>
+                    <li>Equidad y respeto a la dignidad humana</li>
+                    <li>Autonomía académica, jurídica y financiera</li>
+                    <li>Énfasis en investigación como eje misional</li>
+                    <li>Calidad y eficiencia (discursos emergentes)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Nueva sección: Marcos Normativos -->
+        <section id="marcos" class="py-16 bg-gray-50 rounded-2xl my-16">
+            <div class="text-center mb-12 px-4">
+                <h2 class="text-3xl font-bold">Marco Normativo y Entorno Externo</h2>
+                <p class="mt-2 text-gray-600 max-w-3xl mx-auto">La universidad no opera en el vacío. Múltiples organismos y marcos normativos influyen en su gobierno desde 1990.</p>
+            </div>
+            
+            <!-- Timeline de marcos normativos -->
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="relative">
+                    <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-[#E67E22]"></div>
+                    
+                    <div class="space-y-12">
+                        <!-- 1990 -->
+                        <div class="relative flex items-center">
+                            <div class="flex-1 text-right pr-8">
+                                <div class="bg-white p-4 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-[#E67E22]">1990 - Constitución Política</h3>
+                                    <p class="text-sm text-gray-600">Establece el marco de la autonomía universitaria como derecho fundamental.</p>
+                                </div>
+                            </div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#E67E22] rounded-full border-4 border-white"></div>
+                            <div class="flex-1 pl-8"></div>
+                        </div>
+                        
+                        <!-- 1992 -->
+                        <div class="relative flex items-center">
+                            <div class="flex-1 pr-8"></div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#E67E22] rounded-full border-4 border-white"></div>
+                            <div class="flex-1 pl-8">
+                                <div class="bg-white p-4 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-[#E67E22]">1992 - Ley 30</h3>
+                                    <p class="text-sm text-gray-600">Ley General de Educación Superior que define la estructura del sistema universitario.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Organismos Internacionales -->
+                        <div class="relative flex items-center">
+                            <div class="flex-1 text-right pr-8">
+                                <div class="bg-white p-4 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-[#E67E22]">1970-2015 - Organismos Internacionales</h3>
+                                    <p class="text-sm text-gray-600">Banco Mundial, UNESCO, OCDE influyen con lineamientos sobre financiamiento, calidad y evaluación.</p>
+                                </div>
+                            </div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#E67E22] rounded-full border-4 border-white"></div>
+                            <div class="flex-1 pl-8"></div>
+                        </div>
+
+                        <!-- NUEVO: Planes Nacionales -->
+                        <div class="relative flex items-center">
+                            <div class="flex-1 text-right pr-8">
+                                <div class="bg-white p-4 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-[#E67E22]">1990-2014 – Planes Nacionales</h3>
+                                    <p class="text-sm text-gray-600">Vinculan Universidad-Empresa-Estado y priorizan innovación, cobertura y pertinencia.</p>
+                                </div>
+                            </div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#E67E22] rounded-full border-4 border-white"></div>
+                            <div class="flex-1 pl-8"></div>
+                        </div>
+
+                        <!-- NUEVO: Planes Departamentales -->
+                        <div class="relative flex items-center">
+                            <div class="flex-1 pr-8"></div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#E67E22] rounded-full border-4 border-white"></div>
+                            <div class="flex-1 pl-8">
+                                <div class="bg-white p-4 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-[#E67E22]">2000-2015 – Planes Departamentales (Antioquia)</h3>
+                                    <p class="text-sm text-gray-600">Regionalización y articulación con clústeres productivos.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NUEVO: Planes Municipales -->
+                        <div class="relative flex items-center">
+                            <div class="flex-1 text-right pr-8">
+                                <div class="bg-white p-4 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-[#E67E22]">2004-2015 – Planes Municipales (Medellín)</h3>
+                                    <p class="text-sm text-gray-600">Alianzas universidad-empresa y parques tecnológicos para competitividad.</p>
+                                </div>
+                            </div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#E67E22] rounded-full border-4 border-white"></div>
+                            <div class="flex-1 pl-8"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nueva sección: Los Acontecimientos Analizados -->
+        <section id="acontecimientos" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Tres Acontecimientos Clave (2010-2013)</h2>
+                <p class="mt-2 text-gray-600 max-w-3xl mx-auto">El estudio analiza tres acontecimientos contingentes que marcaron la agenda política universitaria y revelaron las dinámicas del gobierno en acción.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Acontecimiento 1: Seguridad -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-red-500 h-32 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3 text-[#E67E22]">Medidas de Seguridad</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Controles de acceso al campus y medidas de seguridad implementadas durante el período de estudio.</p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Actores principales:</span>
+                                <span class="font-medium">Rector, CSU, Seguridad</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Estilo de gobierno:</span>
+                                <span class="font-medium">Ejecutivo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Acontecimiento 2: Representación -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-blue-500 h-32 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3 text-[#E67E22]">Representación y Participación</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Elección de autoridades universitarias y procesos de representación estudiantil y profesoral.</p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Actores principales:</span>
+                                <span class="font-medium">Estamentos, CA, CSU</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Estilo de gobierno:</span>
+                                <span class="font-medium">Colegiado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Acontecimiento 3: Gestión -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-green-500 h-32 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 6a2 2 0 104 0 2 2 0 00-4 0zm6 0a2 2 0 104 0 2 2 0 00-4 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3 text-[#E67E22]">Gestión y Administración</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Políticas administrativas, financieras y de gestión universitaria implementadas en el período.</p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Actores principales:</span>
+                                <span class="font-medium">Rector, Vicerrectores</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Estilo de gobierno:</span>
+                                <span class="font-medium">Gerencial</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nueva sección: Proyectos Políticos -->
+        <section id="proyectos" class="py-16 bg-white rounded-2xl shadow-lg my-16">
+            <div class="text-center mb-12 px-4">
+                <h2 class="text-3xl font-bold">Proyectos Políticos en Tensión</h2>
+                <p class="mt-2 text-gray-600 max-w-3xl mx-auto">El informe identifica diferentes proyectos de universidad que compiten en el escenario político universitario.</p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Proyectos Instituidos -->
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-[#E67E22]">Proyectos Instituidos</h3>
+                        <div class="space-y-6">
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <h4 class="font-bold text-lg mb-2">🏢 Modernizador-Administrativo</h4>
+                                <p class="text-gray-600 text-sm mb-2">La universidad como empresa de conocimiento, enfocada en eficiencia y productividad.</p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Gestión</span>
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Eficiencia</span>
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Resultados</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <h4 class="font-bold text-lg mb-2">🗳️ Democrático-Formal</h4>
+                                <p class="text-gray-600 text-sm mb-2">Democracia indirecta y representación como herramienta formal de gobierno.</p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Representación</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Elecciones</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Institucional</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <h4 class="font-bold text-lg mb-2">🔬 Académico-Investigativo</h4>
+                                <p class="text-gray-600 text-sm mb-2">La élite investigativa y la masificación orientada a la producción de conocimiento.</p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Investigación</span>
+                                    <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Académico</span>
+                                    <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Élite</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Proyectos Instituyentes -->
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-[#E67E22]">Proyectos Instituyentes</h3>
+                        <div class="space-y-6">
+                            <div class="bg-orange-50 p-6 rounded-lg border-l-4 border-[#E67E22]">
+                                <h4 class="font-bold text-lg mb-2">✊ Político-Participativo</h4>
+                                <p class="text-gray-600 text-sm mb-2">Lo político sustantivo, democracia plural y cogobierno como alternativa.</p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Participación</span>
+                                    <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Cogobierno</span>
+                                    <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Democracia</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
+                                <h4 class="font-bold text-lg mb-2">🏛️ Constituyente Universitaria</h4>
+                                <p class="text-gray-600 text-sm mb-2">Propuesta de transformación radical del gobierno universitario.</p>
+                                <div class="flex flex-wrap gap-2 mt-3">
+                                    <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Constituyente</span>
+                                    <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Transformación</span>
+                                    <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Radical</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-red-50 p-6 rounded-lg border-l-4 border-red-500">
+                                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                                    <p class="text-sm"><strong>Tensión Clave:</strong> Los proyectos instituyentes buscan democratizar y expandir la participación, mientras los instituidos priorizan la eficiencia y la representación formal.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nueva sección: Hallazgos y Conclusiones -->
+        <section id="hallazgos" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Hallazgos Principales</h2>
+                <p class="mt-2 text-gray-600 max-w-3xl mx-auto">Los principales hallazgos del estudio revelan las complejidades y contradicciones del gobierno universitario.</p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+                <!-- Análisis de Redes -->
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 text-blue-800">🕸️ Análisis de Redes de Poder</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">•</span>
+                            <span class="text-sm">Alto nivel de centralización en CSU y Consejo Académico</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">•</span>
+                            <span class="text-sm">Rector, Secretario General y Vicerrector General como figuras centrales</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">•</span>
+                            <span class="text-sm">Fragmentación en niveles bajos del gobierno</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">•</span>
+                            <span class="text-sm">Relaciones de cooperación entre estudiantes y profesores</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Gobierno Diferenciado -->
+                <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 text-green-800">⚖️ Gobierno Diferenciado</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">•</span>
+                            <span class="text-sm">Actuación variable según el tipo de acontecimiento</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">•</span>
+                            <span class="text-sm">Flexibilidad adaptativa vs. incoherencias</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">•</span>
+                            <span class="text-sm">Predominio del enfoque administrativo-financiero</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">•</span>
+                            <span class="text-sm">Limitada atención a lo académico-misional</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Autonomía Universitaria -->
+                <div class="bg-gradient-to-br from-yellow-50 to-amber-100 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 text-yellow-800">🏛️ Autonomía en Tensión</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-yellow-500 mr-2">•</span>
+                            <span class="text-sm">Influencia creciente de organismos externos</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-yellow-500 mr-2">•</span>
+                            <span class="text-sm">Presiones financieras y de eficiencia</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-yellow-500 mr-2">•</span>
+                            <span class="text-sm">Marco normativo restrictivo desde 1990</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-yellow-500 mr-2">•</span>
+                            <span class="text-sm">Tensión entre autonomía formal y práctica</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Participación y Democracia -->
+                <div class="bg-gradient-to-br from-purple-50 to-violet-100 p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 text-purple-800">🗳️ Democracia Universitaria</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-purple-500 mr-2">•</span>
+                            <span class="text-sm">Representación formal vs. participación sustantiva</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-purple-500 mr-2">•</span>
+                            <span class="text-sm">Demandas por mayor inclusión y cogobierno</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-purple-500 mr-2">•</span>
+                            <span class="text-sm">Conflicto entre eficiencia y deliberación</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-purple-500 mr-2">•</span>
+                            <span class="text-sm">Propuestas de constituyente universitaria</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nueva sección: Metodología Innovadora -->
+        <section id="metodologia" class="py-16 bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl my-16">
+            <div class="text-center mb-12 px-4">
+                <h2 class="text-3xl font-bold">Metodología Innovadora</h2>
+                <p class="mt-2 text-gray-600 max-w-3xl mx-auto">El estudio empleó un enfoque metodológico innovador que combina análisis institucional con el estudio de acontecimientos políticos.</p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Enfoque Dual -->
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-[#E67E22]">Enfoque Analítico Dual</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-500">
+                                <h4 class="font-bold">📋 Análisis Institucional</h4>
+                                <p class="text-sm text-gray-600 mt-2">Estructura formal, normativa, órganos de gobierno y actores instituidos.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-red-500">
+                                <h4 class="font-bold">⚡ Análisis Coyuntural</h4>
+                                <p class="text-sm text-gray-600 mt-2">Acontecimientos contingentes que revelan dinámicas políticas en acción.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Herramientas -->
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-[#E67E22]">Herramientas de Investigación</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                                <div class="text-2xl mb-2">🕸️</div>
+                                <div class="font-bold text-sm">Análisis de Redes</div>
+                                <div class="text-xs text-gray-600">UCINET 6</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                                <div class="text-2xl mb-2">📊</div>
+                                <div class="font-bold text-sm">Análisis Cualitativo</div>
+                                <div class="text-xs text-gray-600">N-Vivo</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                                <div class="text-2xl mb-2">🎤</div>
+                                <div class="font-bold text-sm">Entrevistas</div>
+                                <div class="text-xs text-gray-600">20 actores clave</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                                <div class="text-2xl mb-2">📚</div>
+                                <div class="font-bold text-sm">Análisis Documental</div>
+                                <div class="text-xs text-gray-600">+150 documentos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nueva sección: Impacto y Proyecciones -->
+        <section id="impacto" class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Impacto y Proyecciones</h2>
+                <p class="mt-2 text-gray-600 max-w-3xl mx-auto">Este estudio pionero establece las bases para futuras investigaciones sobre gobierno universitario en Colombia y América Latina.</p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto">
+                <!-- Contribuciones -->
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="text-center">
+                        <div class="bg-[#E67E22] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-white text-2xl">🔬</span>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Contribución Teórica</h3>
+                        <p class="text-gray-600 text-sm">Marco analítico innovador que integra lo institucional y lo coyuntural en el estudio del gobierno universitario.</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="bg-[#E67E22] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-white text-2xl">📈</span>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Contribución Metodológica</h3>
+                        <p class="text-gray-600 text-sm">Uso pionero del análisis de redes y acontecimientos políticos para estudiar dinámicas universitarias.</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="bg-[#E67E22] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-white text-2xl">🏛️</span>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">Contribución Práctica</h3>
+                        <p class="text-gray-600 text-sm">Insumos para la toma de decisiones informadas sobre el gobierno y la democracia universitaria.</p>
+                    </div>
+                </div>
+                
+                <!-- Recomendaciones -->
+                <div class="bg-gradient-to-r from-[#E67E22] to-[#D35400] text-white p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Recomendaciones para el Futuro</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold mb-3">💡 Para la Investigación</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li>• Estudios comparativos con otras universidades públicas</li>
+                                <li>• Análisis longitudinal de cambios en el gobierno</li>
+                                <li>• Impacto de reformas normativas recientes</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-3">🎯 Para la Práctica</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li>• Democratización de los procesos de toma de decisiones</li>
+                                <li>• Fortalecimiento de la participación estudiantil y profesoral</li>
+                                <li>• Equilibrio entre eficiencia y deliberación democrática</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
     <footer class="bg-gray-800 text-white mt-16">
-        <div class="container mx-auto px-6 py-8 text-center">
-            <p>Aplicación creada para la visualización interactiva del informe del IEP (2015).</p>
-            <p class="text-sm text-gray-400 mt-2">Diseño y desarrollo con fines educativos.</p>
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- Información del Estudio -->
+                <div class="md:col-span-2">
+                    <h3 class="text-xl font-bold mb-4 text-[#E67E22]">Sobre el Estudio</h3>
+                    <p class="text-gray-300 text-sm mb-4">
+                        "Caracterización y Análisis del Gobierno Universitario de la Universidad de Antioquia" es un estudio pionero realizado por el Instituto de Estudios Políticos (IEP) entre 2010-2015.
+                    </p>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p><strong>Coordinadora:</strong> Deicy Patricia Hurtado Galeano</p>
+                        <p><strong>Investigadores:</strong> Olga Lucía Zapata Cortés, Didiher Mauricio Rojas Usma</p>
+                        <p><strong>Institución:</strong> Instituto de Estudios Políticos, Universidad de Antioquia</p>
+                    </div>
+                </div>
+                
+                <!-- Enlaces Útiles -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-[#E67E22]">Enlaces de Interés</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><a href="http://iep.udea.edu.co" class="hover:text-[#E67E22] transition-colors">Instituto de Estudios Políticos</a></li>
+                        <li><a href="https://www.udea.edu.co" class="hover:text-[#E67E22] transition-colors">Universidad de Antioquia</a></li>
+                        <li><a href="#" class="hover:text-[#E67E22] transition-colors">Biblioteca Digital del Estudio</a></li>
+                        <li><a href="#" class="hover:text-[#E67E22] transition-colors">Informe Completo</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Metodología Resumida -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-[#E67E22]">Metodología</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li>📊 Análisis de contenido</li>
+                        <li>🕸️ Análisis de redes sociales</li>
+                        <li>🎤 20 entrevistas semiestructuradas</li>
+                        <li>📚 +150 documentos analizados</li>
+                        <li>⚡ 3 acontecimientos clave</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Línea divisora y copyright -->
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-sm text-gray-400">
+                    Aplicación web interactiva creada para la visualización del informe del IEP (2015). 
+                    <br>Diseño y desarrollo con fines educativos y divulgación académica.
+                </p>
+                <div class="mt-4 flex justify-center space-x-4 text-xs text-gray-500">
+                    <span>© 2015 Instituto de Estudios Políticos</span>
+                    <span>•</span>
+                    <span>Universidad de Antioquia</span>
+                    <span>•</span>
+                    <span>Medellín, Colombia</span>
+                </div>
+                
+                <!-- Cita del documento -->
+                <div class="mt-6 max-w-4xl mx-auto bg-gray-700 p-4 rounded-lg">
+                    <p class="text-xs text-gray-300 italic text-center">
+                        "Transformar la Universidad equivale a reconstruir un avión en pleno vuelo. Se deben reconvertir los motores de hélice a turbina; se debe hacerlo volar a mayor velocidad sin aumentar el consumo de combustible y todo debe realizarse sin aterrizar, con limitada cantidad de gasolina, sin que los pasajeros se inquieten [...]"
+                    </p>
+                    <p class="text-xs text-gray-400 text-center mt-2">— Ricardo Arechavala Vargas</p>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu functionality
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenuButton.addEventListener('click', () => {
@@ -201,6 +890,7 @@
                 mobileMenu.classList.toggle('flex');
             });
 
+            // Navigation and scroll spy
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('section');
             
@@ -221,6 +911,7 @@
                 });
             });
 
+            // Close mobile menu on link click
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     if (mobileMenu.classList.contains('flex')) {
@@ -230,6 +921,7 @@
                 });
             });
 
+            // Tab functionality for concepts section
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabPanes = document.querySelectorAll('.tab-pane');
 
@@ -252,6 +944,7 @@
                 });
             });
 
+            // Diagram tooltip functionality
             const diagramElements = document.querySelectorAll('.diagram-element');
             const tooltip = document.getElementById('diagram-tooltip');
 
@@ -289,6 +982,7 @@
                 });
             });
 
+            // Chart.js for CSU Functions
             const ctx = document.getElementById('csuFunctionsChart').getContext('2d');
             const csuFunctionsChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -342,6 +1036,112 @@
                     cutout: '60%'
                 }
             });
+
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-up');
+                        if (entry.target.classList.contains('timeline-item')) {
+                            entry.target.classList.add('visible');
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for animation
+            const animatedElements = document.querySelectorAll('.card-hover, .timeline-item');
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+
+            // Counter animation for metrics
+            const counters = document.querySelectorAll('.text-3xl.font-bold.text-\\[\\#E67E22\\]');
+            
+            const animateCounters = () => {
+                counters.forEach(counter => {
+                    const target = counter.textContent;
+                    const isNumber = !isNaN(target);
+                    
+                    if (isNumber) {
+                        const increment = target / 200;
+                        let current = 0;
+                        
+                        const updateCounter = () => {
+                            if (current < target) {
+                                current += increment;
+                                counter.textContent = Math.ceil(current);
+                                setTimeout(updateCounter, 10);
+                            } else {
+                                counter.textContent = target;
+                            }
+                        };
+                        
+                        updateCounter();
+                    }
+                });
+            };
+
+            // Trigger counter animation when metrics section is visible
+            const metricsSection = document.querySelector('#inicio .grid');
+            if (metricsSection) {
+                const metricsObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateCounters();
+                            metricsObserver.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                metricsObserver.observe(metricsSection);
+            }
+
+            // Add hover effects to interactive elements
+            const interactiveElements = document.querySelectorAll('.group, .card-hover, .interactive-element');
+            interactiveElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    element.style.transform = 'translateY(-2px)';
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    element.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add a subtle parallax effect to hero section
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const heroSection = document.querySelector('#inicio');
+                if (heroSection) {
+                    const rate = scrolled * -0.5;
+                    heroSection.style.transform = `translateY(${rate}px)`;
+                }
+            });
+
+            // Add loading animation
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 100);
         });
     </script>
 </body>
